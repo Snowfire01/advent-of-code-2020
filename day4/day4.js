@@ -1,7 +1,6 @@
-const { match } = require("assert")
 const fs = require("fs")
 
-let fileText = fs.readFileSync("data.txt").toString().replaceAll("\r", "")
+let fileText = fs.readFileSync("passports.txt").toString().replace(/\r/g, "")
 let lines = fileText.split("\n\n")
 
 /*
@@ -54,7 +53,7 @@ Count the number of valid passports - those that have all required fields. Treat
 function partOne() {
     let valid = 0
 
-    for (line of lines){
+    for (line of lines) {
         let kvStrings = line.split(/[ \n]/)
         let object = {}
 
