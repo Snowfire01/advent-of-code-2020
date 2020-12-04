@@ -1,7 +1,7 @@
 const fs = require("fs")
 
-let fileText = fs.readFileSync("passwords.txt").toString()
-let lines = fileText.split("\r\n")
+let fileText = fs.readFileSync("passwords.txt").toString().replaceAll("\r", "")
+let lines = fileText.split("\n")
 
 /*
 --- Day 2: Password Philosophy ---

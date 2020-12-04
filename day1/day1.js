@@ -1,7 +1,7 @@
 const fs = require("fs")
 
-let fileText = fs.readFileSync("expense_report.txt").toString()
-let lines = fileText.split("\r\n")
+let fileText = fs.readFileSync("expense_report.txt").toString().replaceAll("\r", "")
+let lines = fileText.split("\n")
 
 /*
 --- Day 1: Report Repair ---

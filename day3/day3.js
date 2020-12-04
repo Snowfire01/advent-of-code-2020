@@ -1,7 +1,7 @@
 const fs = require("fs")
 
-let fileText = fs.readFileSync("data.txt").toString()
-let lines = fileText.split("\r\n")
+let fileText = fs.readFileSync("data.txt").toString().replaceAll("\r", "")
+let lines = fileText.split("\n")
 
 /*
 --- Day 3: Toboggan Trajectory ---
