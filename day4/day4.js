@@ -75,7 +75,7 @@ function partOne() {
     return valid
 }
 
-console.log("Part 1: " + partOne())
+console.log("Part 1:", partOne())
 
 /*
 --- Part Two ---
@@ -169,4 +169,4 @@ function partTwo() {
     return valid - 1
 }
 
-console.log("Part 2: " + partTwo())
+console.log("Part 2:", partTwo())

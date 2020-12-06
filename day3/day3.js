@@ -59,7 +59,7 @@ Starting at the top-left corner of your map and following a slope of right 3 and
 
 function IndexIsTree(line, index) {
     if (index >= line.length) {
-        index %= line.length 
+        index %= line.length
     }
 
     return line[index] === "#"
@@ -79,7 +79,7 @@ function partOne() {
     return trees
 }
 
-console.log("Part 1: " + partOne())
+console.log("Part 1:", partOne())
 
 /*
 --- Part Two ---
@@ -102,7 +102,7 @@ function traverse(right, down) {
 
     let currentIndex = 0
 
-    for (let row = 0; row < lines.length; row+=down) {
+    for (let row = 0; row < lines.length; row += down) {
         let line = lines[row]
 
         if (IndexIsTree(line, currentIndex)) trees++
@@ -114,8 +114,8 @@ function traverse(right, down) {
 }
 
 function partTwo() {
-    results = [traverse(1,1), traverse(3,1), traverse(5,1), traverse(7,1), traverse(1,2)]
-    return results.reduce((x,y) => x*y)
+    results = [traverse(1, 1), traverse(3, 1), traverse(5, 1), traverse(7, 1), traverse(1, 2)]
+    return results.reduce((x, y) => x * y)
 }
 
- console.log("Part 2: " + partTwo())
+console.log("Part 2:", partTwo())
