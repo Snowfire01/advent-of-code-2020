@@ -44,11 +44,10 @@ As a sanity check, look through your list of boarding passes. What is the highes
 */
 
 function getSeat(code) {
-    rowString = code.slice(0, 7).replace(/B/g, "1").replace(/F/g, "0")
-    columnString = code.slice(7).replace(/R/g, "1").replace(/L/g, "0")
+    code = code.replace(/[BR]/g, 1).replace(/[FL]/g, 0)
 
-    let row = parseInt(rowString, 2)
-    let column = parseInt(columnString, 2)
+    let row = parseInt(code, 2) >> 3
+    let column = parseInt(code, 2) & 0b0000000111
 
     return {
         row: row,
@@ -65,7 +64,7 @@ function partOne() {
     return getSeats().pop().id
 }
 
-console.log("Part 1: " + partOne())
+console.log("Part 1:", partOne())
 
 /*
 --- Part Two ---
@@ -87,8 +86,4 @@ function partTwo() {
     }
 }
 
-console.log("Part 2: " + partTwo())
-
-// line.replace(/[BR]/g, 1).replace(/[FL]/g, 0)
-
-console.log(getSeat("1100101110"))
+console.log("Part 2:", partTwo())
