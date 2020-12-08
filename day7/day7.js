@@ -3,8 +3,6 @@ const fs = require("fs")
 let fileText = fs.readFileSync("rules.txt").toString()
 let lines = fileText.split("\n")
 
-bags = []
-
 /*
 --- Day 7: Handy Haversacks ---
 You land at the regional airport in time for your next flight. In fact, it looks like you'll even have time to grab some food: all flights are currently delayed due to issues in luggage processing.
@@ -37,12 +35,52 @@ So, in this example, the number of bag colors that can eventually contain at lea
 How many bag colors can eventually contain at least one shiny gold bag? (The list of rules is quite long; make sure you get all of it.)
 */
 
-function getRule(line) {
+function parseBag(inputText) {
     let retVal = {}
-    let parts = line.split(" ")
+    let parts = inputText.split(" ")
 
     retVal.shade = parts[0]
     retVal.color = parts[1]
+    retVal.id = `${parts[0]}_${parts[1]}`
+    retVal.equals = function (other) {
+        return this.id === other.id
+    }
 
-
+    return retVal
 }
+
+function getBag(line) {
+    let parts = line.split("contain")
+    let baseBag = parseBag(parts.splice(0, 1)[0])
+
+    if (!parts[0].includes("no")) {
+        subParts = parts[0].split(",")
+        baseBag.contents = []
+
+        for (subPart of subParts) {
+            let quantity = subPart.slice(0, subPart.indexOf(" ") + 1)
+
+            baseBag.contents.push({
+                ...parseBag(subPart.replace(quantity, "")),
+                quantity: +quantity
+            })
+        }
+    }
+
+    return baseBag
+}
+
+const bags = lines.map(getBag)
+
+function getContainingBags(bagId) {
+    return bags.filter(x => x.contents?.some(x => x.id === bagId))
+}
+
+// console.dir(lines.map(getBag), { depth: null })
+console.dir(getContainingBags("shiny_gold"), { depth: null })
+console.log(bags[0].equals(bags[0]))
+console.log(bags[0].equals(bags[1]))
+
+setTimeout(() => {
+    console.log(getBag("shiny aqua bags contain 1 dark white bag."))
+}, 10000)
