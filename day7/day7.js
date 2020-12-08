@@ -96,7 +96,9 @@ function partOne(input = "shiny_gold") {
 
     searchParents(DIRECT_PARENTS, FINAL)
 
-    return FINAL.map(x => x.id).filter((value, index, self)=>self.indexOf(value) === index).length
+    return FINAL.map(x => x.id)
+                .filter((value, index, self) => self.indexOf(value) === index)
+                .length
 }
 
 console.log("Part 1:", partOne())

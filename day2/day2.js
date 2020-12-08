@@ -1,7 +1,7 @@
 const fs = require("fs")
 
-let fileText = fs.readFileSync("passwords.txt").toString().replaceAll("\r", "")
-let lines = fileText.split("\n")
+const FILE_TEXT = fs.readFileSync("passwords.txt").toString().replaceAll("\r", "")
+const LINES = FILE_TEXT.split("\n")
 
 /*
 --- Day 2: Password Philosophy ---
@@ -29,7 +29,7 @@ function partOne() {
     let valid = 0
     let reg = /(\d+)-(\d+) (\w): (.+)/
 
-    for (line of lines) {
+    for (line of LINES) {
         let match = reg.exec(line)
 
         let min = +match[1]
@@ -69,7 +69,7 @@ function partTwo() {
     let valid = 0
     let reg = /(\d+)-(\d+) (\w): (.+)/
 
-    for (line of lines) {
+    for (line of LINES) {
         let match = reg.exec(line)
 
         let firstIndex = match[1] - 1
