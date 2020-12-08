@@ -1,7 +1,43 @@
 const fs = require("fs")
+const { SourceMap } = require("module")
 
-let fileText = fs.readFileSync("rules.txt").toString()
-let lines = fileText.split("\n")
+const FILE_TEXT = fs.readFileSync("rules.txt").toString()
+const LINES = FILE_TEXT.split("\n")
+
+function parseBag(bagSpec, hasQuantity=false) {
+    bagSpec =  bagSpec.trim()
+
+    let retVal = {}
+    let parts = bagSpec.split(" ")
+
+    if (hasQuantity) retVal.quantity = +parts[0]
+
+    retVal.shade = parts[0 + hasQuantity]
+    retVal.color = parts[1 + hasQuantity]
+    retVal.id = `${parts[0 + hasQuantity]}_${parts[1 + hasQuantity]}`
+    retVal.contains = function (other) {
+        return this.contents?.some(x=>x.id === other)
+    }
+
+    return retVal
+}
+
+function parseLine(line) {
+    line = line.trim().replace(".","")
+
+    let sections = line.split("contain")
+    let bagSpec = sections[0].trim()
+    let containerSpec = sections[1].trim()
+
+    let bag = parseBag(bagSpec)
+
+    if (containerSpec !== "no other bags") {
+        let contained = containerSpec.split(",").map(x => parseBag(x, true))
+        bag.contents = contained
+    }
+
+    return bag
+}
 
 /*
 --- Day 7: Handy Haversacks ---
@@ -35,52 +71,79 @@ So, in this example, the number of bag colors that can eventually contain at lea
 How many bag colors can eventually contain at least one shiny gold bag? (The list of rules is quite long; make sure you get all of it.)
 */
 
-function parseBag(inputText) {
-    let retVal = {}
-    let parts = inputText.split(" ")
+const BAGS = LINES.map(parseLine)
 
-    retVal.shade = parts[0]
-    retVal.color = parts[1]
-    retVal.id = `${parts[0]}_${parts[1]}`
-    retVal.equals = function (other) {
-        return this.id === other.id
-    }
+function searchParents(parents, target) {
+    let lookInto = []
 
-    return retVal
-}
-
-function getBag(line) {
-    let parts = line.split("contain")
-    let baseBag = parseBag(parts.splice(0, 1)[0])
-
-    if (!parts[0].includes("no")) {
-        subParts = parts[0].split(",")
-        baseBag.contents = []
-
-        for (subPart of subParts) {
-            let quantity = subPart.slice(0, subPart.indexOf(" ") + 1)
-
-            baseBag.contents.push({
-                ...parseBag(subPart.replace(quantity, "")),
-                quantity: +quantity
-            })
+    for (parent of parents) {
+        for (bag of BAGS) {
+            if (bag.contains(parent.id)) {
+                lookInto.push(bag)
+            }
         }
     }
 
-    return baseBag
+    if (lookInto.some(x=>x)) {
+        target.push(...lookInto)
+        searchParents(lookInto, target)
+    }
 }
 
-const bags = lines.map(getBag)
+function partOne(input = "shiny_gold") {
+    const DIRECT_PARENTS = BAGS.filter(x => x.contains(input))
+    const FINAL = [...DIRECT_PARENTS]
 
-function getContainingBags(bagId) {
-    return bags.filter(x => x.contents?.some(x => x.id === bagId))
+    searchParents(DIRECT_PARENTS, FINAL)
+
+    return FINAL.map(x => x.id).filter((value, index, self)=>self.indexOf(value) === index).length
 }
 
-// console.dir(lines.map(getBag), { depth: null })
-console.dir(getContainingBags("shiny_gold"), { depth: null })
-console.log(bags[0].equals(bags[0]))
-console.log(bags[0].equals(bags[1]))
+console.log("Part 1:", partOne())
 
-setTimeout(() => {
-    console.log(getBag("shiny aqua bags contain 1 dark white bag."))
-}, 10000)
+/*
+--- Part Two ---
+It's getting pretty expensive to fly these days - not because of ticket prices, but because of the ridiculous number of bags you need to buy!
+
+Consider again your shiny gold bag and the rules from the above example:
+
+faded blue bags contain 0 other bags.
+dotted black bags contain 0 other bags.
+vibrant plum bags contain 11 other bags: 5 faded blue bags and 6 dotted black bags.
+dark olive bags contain 7 other bags: 3 faded blue bags and 4 dotted black bags.
+So, a single shiny gold bag must contain 1 dark olive bag (and the 7 bags within it) plus 2 vibrant plum bags (and the 11 bags within each of those): 1 + 1*7 + 2 + 2*11 = 32 bags!
+
+Of course, the actual rules have a small chance of going several levels deeper than this example; be sure to count all of the bags, even if the nesting becomes topologically impractical!
+
+Here's another example:
+
+shiny gold bags contain 2 dark red bags.
+dark red bags contain 2 dark orange bags.
+dark orange bags contain 2 dark yellow bags.
+dark yellow bags contain 2 dark green bags.
+dark green bags contain 2 dark blue bags.
+dark blue bags contain 2 dark violet bags.
+dark violet bags contain no other bags.
+In this example, a single shiny gold bag must contain 126 other bags.
+
+How many individual bags are required inside your single shiny gold bag?
+*/
+
+function getChildrenCount(bagId) {
+    let bag = BAGS.filter(x => x.id === bagId)[0]
+    let childCount = bag.contents?.reduce((agg, curr) => agg + curr.quantity, 0) || 0
+
+    for (let child of bag.contents || []) {
+        for (let i = 0; i < child.quantity; i++) {
+            childCount += getChildrenCount(child.id)
+        }
+    }
+
+    return childCount 
+}
+
+function partTwo(input = "shiny_gold") {
+    return getChildrenCount(input)
+}
+
+console.log("Part 2:", partTwo())
