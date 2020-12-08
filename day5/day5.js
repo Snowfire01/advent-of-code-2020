@@ -1,7 +1,7 @@
 const fs = require("fs")
 
-let fileText = fs.readFileSync("seats.txt").toString()
-let lines = fileText.split("\n")
+const FILE_TEXT = fs.readFileSync("seats.txt").toString()
+const LINES = FILE_TEXT.split("\n")
 
 /*
 --- Day 5: Binary Boarding ---
@@ -57,7 +57,7 @@ function getSeat(code) {
 }
 
 function getSeats() {
-    return lines.map(getSeat).sort((a, b) => (a.row - b.row) || (a.column - b.column))
+    return LINES.map(getSeat).sort((a, b) => (a.row - b.row) || (a.column - b.column))
 }
 
 function partOne() {

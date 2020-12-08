@@ -4,8 +4,8 @@ Number.prototype.between = function (a, b) {
     return this >= a && this <= b
 }
 
-let fileText = fs.readFileSync("passports.txt").toString()
-let lines = fileText.split("\n\n")
+const FILE_TEXT = fs.readFileSync("passports.txt").toString()
+const LINES = FILE_TEXT.split("\n\n")
 
 /*
 --- Day 4: Passport Processing ---
@@ -57,7 +57,7 @@ Count the number of valid passports - those that have all required fields. Treat
 function partOne() {
     let valid = 0
 
-    for (line of lines) {
+    for (line of LINES) {
         let kvStrings = line.split(/[ \n]/)
         let object = {}
 
@@ -68,7 +68,7 @@ function partOne() {
 
         if (Object.keys(object).length - ("cid" in object) == 7) {
             valid++
-            one.push(lines.indexOf(line))
+            one.push(LINES.indexOf(line))
         }
     }
 
@@ -149,7 +149,7 @@ function partTwo() {
 
     let reg = /(?=.*iyr:(\d{4}))(?=.*byr:(\d{4}))(?=.*eyr:(\d{4}))(?=.*hcl:#[\da-f]{6})(?=.*hgt:(\d{2,3})(in|cm))(?=.*ecl:(?=amb|blu|brn|gry|grn|hzl|oth))(?=.*pid:\d{9}).*/
 
-    for (line of lines) {
+    for (line of LINES) {
         line = line.replace(/\n/g, " ")
         let match = reg.exec(line)
 

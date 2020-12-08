@@ -1,7 +1,7 @@
 const fs = require("fs")
 
-let fileText = fs.readFileSync("expense_report.txt").toString().replaceAll("\r", "")
-let lines = fileText.split("\n")
+const FILE_TEXT = fs.readFileSync("expense_report.txt").toString().replaceAll("\r", "")
+const LINES = FILE_TEXT.split("\n")
 
 /*
 --- Day 1: Report Repair ---
@@ -30,10 +30,10 @@ In this list, the two entries that sum to 2020 are 1721 and 299. Multiplying the
 */
 
 function partOne() {
-    for (left = 0; left < lines.length; left++) {
-        for (right = left + 1; right < lines.length; right++) {
-            number1 = +lines[left]
-            number2 = +lines[right]
+    for (left = 0; left < LINES.length; left++) {
+        for (right = left + 1; right < LINES.length; right++) {
+            number1 = +LINES[left]
+            number2 = +LINES[right]
 
             if (number1 + number2 === 2020) return number1 * number2
         }
@@ -51,14 +51,14 @@ In your expense report, what is the product of the three entries that sum to 202
 */
 
 function partTwo() {
-    for (let left = 0; left < lines.length; left++) {
-        let number1 = +lines[left]
+    for (let left = 0; left < LINES.length; left++) {
+        let number1 = +LINES[left]
 
-        for (let middle = left + 1; middle < lines.length; middle++) {
-            let number2 = +lines[middle]
+        for (let middle = left + 1; middle < LINES.length; middle++) {
+            let number2 = +LINES[middle]
 
-            for (let right = middle + 1; right < lines.length; right++) {
-                let number3 = +lines[right]
+            for (let right = middle + 1; right < LINES.length; right++) {
+                let number3 = +LINES[right]
 
                 if (number1 + number2 + number3 === 2020) return number1 * number2 * number3
             }

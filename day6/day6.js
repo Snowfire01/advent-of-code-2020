@@ -1,7 +1,7 @@
 const fs = require("fs")
 
-let fileText = fs.readFileSync("answers.txt").toString()
-let groups = fileText.split("\n\n")
+const FILE_TEXT = fs.readFileSync("answers.txt").toString()
+const GROUPS = FILE_TEXT.split("\n\n")
 
 /*
 --- Day 6: Custom Customs ---
@@ -48,7 +48,7 @@ For each group, count the number of questions to which anyone answered "yes". Wh
 function partOne() {
     let retVal = 0
 
-    for (let group of groups) {
+    for (let group of GROUPS) {
         let line = group.replace(/\n/g, "")
         retVal += new Set(line).size
     }
@@ -96,7 +96,7 @@ For each group, count the number of questions to which everyone answered "yes". 
 function partTwo() {
     let retVal = 0
 
-    for (let group of groups) {
+    for (let group of GROUPS) {
         let lines = group.split("\n")
         let letters = {}
 

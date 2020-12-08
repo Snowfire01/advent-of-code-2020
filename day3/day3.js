@@ -1,7 +1,7 @@
 const fs = require("fs")
 
-let fileText = fs.readFileSync("data.txt").toString().replaceAll("\r", "")
-let lines = fileText.split("\n")
+const FILE_TEXT = fs.readFileSync("data.txt").toString().replaceAll("\r", "")
+const LINES = FILE_TEXT.split("\n")
 
 /*
 --- Day 3: Toboggan Trajectory ---
@@ -70,7 +70,7 @@ function partOne() {
 
     let currentIndex = 0
 
-    for (line of lines) {
+    for (line of LINES) {
         if (IndexIsTree(line, currentIndex)) trees++
 
         currentIndex += 3
@@ -102,8 +102,8 @@ function traverse(right, down) {
 
     let currentIndex = 0
 
-    for (let row = 0; row < lines.length; row += down) {
-        let line = lines[row]
+    for (let row = 0; row < LINES.length; row += down) {
+        let line = LINES[row]
 
         if (IndexIsTree(line, currentIndex)) trees++
 
