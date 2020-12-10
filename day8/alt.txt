@@ -1,0 +1,6 @@
+acc +4
+nop +0
+acc +3
+jmp +1
+acc +1
+acc +2

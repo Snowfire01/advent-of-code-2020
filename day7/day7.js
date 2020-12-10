@@ -1,5 +1,4 @@
 const fs = require("fs")
-const { SourceMap } = require("module")
 
 const FILE_TEXT = fs.readFileSync("rules.txt").toString()
 const LINES = FILE_TEXT.split("\n")
